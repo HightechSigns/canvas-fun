@@ -68,6 +68,37 @@ $(document).ready(() => {
         backgroundColor: color,
         border: '#000000'
     };
+    $('#btn_plus').click((e) => {
+        // let currWidth = parseInt($('#myCanvas').attr('width'))
+        // let currHeight = parseInt($('#myCanvas').attr('height'))
+        // let zoomTotal = (currWidth + currHeight)/2;
+        // console.log(zoomTotal)
+        zoomFunc(true)
+        // $('#myCanvas').attr({'width':0,'height':0})
+        // $('#myCanvas').attr({'width':currWidth - 500,'height':currHeight - 500})
+        drawing(e);
+    })
+    $('#btn_minus').click((e) => {
+        // let currWidth = $('#myCanvas').attr('width')
+        // let currHeight = $('#myCanvas').attr('height')
+        zoomFunc(false)
+        // $('#myCanvas').attr({'width':0,'height':0})
+        // $('#myCanvas').attr({'width':currWidth + 500,'height':currHeight + 500})
+        drawing(e);
+    })
+    const zoomFunc = (z) => {
+        // get current size
+        let currWidth = parseInt($('#myCanvas').attr('width'))
+        let currHeight = parseInt($('#myCanvas').attr('height'))
+        let total = currWidth + currHeight;
+        $('#myCanvas').attr({'width':0,'height':0})
+        if (!z && total >= 1000 && total < 6000) {
+            $('#myCanvas').attr({ 'width': total + 500, 'height': total + 500 })
+        } else {
+            $('#myCanvas').attr({ 'width': total - 500, 'height': total - 500 })
+        }
+        console.log(total)
+    }
     const drawing = (e) => {
         colorValElm.text("");
         // set up the values

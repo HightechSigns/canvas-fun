@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
     <title>Document</title>
 </head>
 
@@ -14,18 +15,24 @@
     <div class="artboardTools">
         <div>
             <p>Width Inches</p>
-            <input type="number" step=".25" min=1.5 max=24 class="input" id="widthInput">
+            <input type="number" step=".25" min=1 max=24 class="input" id="widthInput">
         </div>
         <div>
             <p>Height Inches</p>
-            <input type="number" step=".25" min=1.5 max=24 class="input" id="heightInput">
+            <input type="number" step=".25" min=1 max=24 class="input" id="heightInput">
         </div>
         <div>
             <p>Canvas Color: <span id="colorVal"></span></p>
             <input type="color" value="#ffffff" id="colorPicker">
         </div>
     </div>
-    <canvas id="myCanvas" width="2000" height="2000"></canvas>
+    <div class="canvas_cont">
+        <div class="canvas_tools_cont">
+            <div class="btn" id="btn_plus"><i class="fa fa-plus"></i></div>
+            <div class="btn" id="btn_minus"><i class="fa fa-minus"></i></div>
+        </div>
+        <canvas id="myCanvas" width="3000" height="3000"></canvas>
+    </div>
 
     <script src="./index.js"></script>
 </body>
