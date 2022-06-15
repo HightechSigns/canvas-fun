@@ -29,7 +29,8 @@ $(document).ready(() => {
     const inputHeightElm = $("#heightInput");
     const inputColorElm = $("#colorPicker");
     const colorValElm = $("#colorVal");
-
+    // set canvas size on load
+    $('#myCanvas').attr({ 'width': 3000, 'height': 3000 })
     // set values on load
     inputWidthElm.val(8.5);
     inputHeightElm.val(11);
@@ -69,35 +70,35 @@ $(document).ready(() => {
         border: '#000000'
     };
     $('#btn_plus').click((e) => {
-        // let currWidth = parseInt($('#myCanvas').attr('width'))
-        // let currHeight = parseInt($('#myCanvas').attr('height'))
-        // let zoomTotal = (currWidth + currHeight)/2;
-        // console.log(zoomTotal)
-        zoomFunc(true)
-        // $('#myCanvas').attr({'width':0,'height':0})
-        // $('#myCanvas').attr({'width':currWidth - 500,'height':currHeight - 500})
+        zoomFunc( true)
         drawing(e);
     })
     $('#btn_minus').click((e) => {
-        // let currWidth = $('#myCanvas').attr('width')
-        // let currHeight = $('#myCanvas').attr('height')
-        zoomFunc(false)
-        // $('#myCanvas').attr({'width':0,'height':0})
-        // $('#myCanvas').attr({'width':currWidth + 500,'height':currHeight + 500})
+        zoomFunc( false)
         drawing(e);
+
     })
-    const zoomFunc = (z) => {
+    const zoomFunc = ( z) => {
         // get current size
         let currWidth = parseInt($('#myCanvas').attr('width'))
         let currHeight = parseInt($('#myCanvas').attr('height'))
-        let total = currWidth + currHeight;
-        $('#myCanvas').attr({'width':0,'height':0})
-        if (!z && total >= 1000 && total < 6000) {
-            $('#myCanvas').attr({ 'width': total + 500, 'height': total + 500 })
+        let max = 6000;
+        let min = 2000;
+        // $('#myCanvas').attr({ 'width': 0, 'height': 0 })
+        if (z) {
+            if (currWidth >= min) {
+                $('#myCanvas').attr({ 'width': currWidth- 500, 'height': currHeight - 500 })
+            } else {
+                return;
+            }
         } else {
-            $('#myCanvas').attr({ 'width': total - 500, 'height': total - 500 })
+            if (currWidth <= max) {
+                $('#myCanvas').attr({ 'width': currWidth + 500, 'height': currHeight + 500 })
+            } else {
+                return;
+            }
         }
-        console.log(total)
+        console.log(currHeight)
     }
     const drawing = (e) => {
         colorValElm.text("");
@@ -105,11 +106,9 @@ $(document).ready(() => {
         let w = getInch(inputWidthElm.val());
         let h = getInch(inputHeightElm.val());
         let c = inputColorElm.val();
-
         artboardObj.width = w;
         artboardObj.height = h;
         artboardObj.backgroundColor = c;
-        // console.log(artboardObj);
         // set html with background color
         colorValElm.text(c);
         if (e) {
