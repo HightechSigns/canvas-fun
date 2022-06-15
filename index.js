@@ -1,3 +1,52 @@
+// notes for SVG drawing
+/*
+<svg viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Simple rectangle -->
+  <rect width="100" height="100" />
+
+  <!-- Rounded corner rectangle -->
+  <rect x="120" width="100" height="100" rx="15" />
+</svg>
+
+
+// object on canvas move
+ctx.moveTo(20, 20);
+*/
+// use this for building shapes when a toolbar is made
+function drawSVG(shape) {
+    let renderShape;
+    switch (shape) {
+        case 'square':
+            renderShape = `<svg viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Simple rectangle -->
+                                <rect width="15" height="15" />
+                            </svg>`
+            break;
+        case 'rectangle':
+            renderShape = `<svg viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Simple rectangle -->
+                                    <rect width="20" height="15" />
+                                </svg>`
+            break;
+        case 'circle':
+            renderShape = `<svg viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Simple rectangle -->
+                                    <circle cx="25" cy="75" r="20" stroke="red" fill="transparent" stroke-width="5"/>
+                                </svg>`
+            break;
+        case 'triangle':
+            renderShape = `<svg height="15" width="15" xmlns="http://www.w3.org/2000/svg">
+                                    <polygon points="7.5,0 0,15 15,15" />
+                                    Sorry, your browser does not support inline SVG.
+                                </svg>`
+            break;
+        default:
+            break;
+    }
+    $(this).append(renderShape)
+    // return renderShape;
+}
+let canvasElm;
 function draw(artboard) {
     const canvas = document.getElementById("myCanvas");
     let canWidth = canvas.width;
@@ -6,16 +55,17 @@ function draw(artboard) {
     if (canvas.getContext) {
         const ctx = canvas.getContext("2d");
         // clear canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         // create new
         ctx.fillStyle = artboard.backgroundColor;
-        ctx.fillRect(canWidth / 2 - artboard.width / 2, canHeight / 2 - artboard.height / 2, artboard.width, artboard.height);
-        ctx.strokeStyle = artboard.border;
-        ctx.lineWidth = artboard.border;
-        // stroked artboard
         ctx.strokeStyle = 'black';
-        ctx.strokeRect(canWidth / 2 - artboard.width / 2, canHeight / 2 - artboard.height / 2, artboard.width, artboard.height);
-
+        ctx.lineWidth = 5
+        let path1 = new Path2D();
+        path1.rect(canWidth / 2 - artboard.width / 2, canHeight / 2 - artboard.height / 2, artboard.width, artboard.height)
+        ctx.fill(path1);
+        ctx.stroke(path1);
+        // set canvasElm
+        canvasElm = path1;
     }
 }
 var getInch = (inch) => {
@@ -38,6 +88,7 @@ $(document).ready(() => {
     // set html with background color
     colorValElm.text(color);
 
+    // handler events
     inputColorElm.change((e) => {
         drawing(e);
     });
@@ -62,6 +113,7 @@ $(document).ready(() => {
             }
         });
     };
+    // artboard object when the user changes a setting
     let artboardObj = {
         // set starting points
         width: 816,
@@ -70,36 +122,63 @@ $(document).ready(() => {
         border: '#000000'
     };
     $('#btn_plus').click((e) => {
-        zoomFunc( true)
+        zoomFunc(true);
         drawing(e);
     })
     $('#btn_minus').click((e) => {
-        zoomFunc( false)
+        zoomFunc(false);
         drawing(e);
-
     })
-    const zoomFunc = ( z) => {
+    // onload hide drop down
+    $('#btn_drop_down_cont').hide()
+    // dropdown button
+    $('#btn_dd').click(e => {
+        if (e) {
+            $('#btn_drop_down_cont').slideToggle('fast')
+            $('.btn_drop_down>i').toggleClass('rotate')
+        }
+    })
+    // canvas shape selection functionality
+    var canvasShapeSelectionElm = $('.canvas_shape_sel');
+    // selection handler
+    canvasShapeSelectionElm.click(function () {
+        var slcVal = $(this).attr("data-canshape").toLowerCase();
+        // get rid of active class for all
+        let slctArr = Array.from(canvasShapeSelectionElm);
+        slctArr.map(elm => {
+            $(elm).removeClass('canvas_shape_sel_active');
+        })
+        // add active class to curr
+        $(this).addClass('canvas_shape_sel_active');
+        // add funtionality to draw new canvas
+
+        console.log(slcVal);
+    });
+    const zoomFunc = (z) => {
         // get current size
         let currWidth = parseInt($('#myCanvas').attr('width'))
         let currHeight = parseInt($('#myCanvas').attr('height'))
-        let max = 6000;
-        let min = 2000;
-        // $('#myCanvas').attr({ 'width': 0, 'height': 0 })
+        // user input maxes and readjust zoom level.
+        // logic goes here
+        let max = 6000; // these are reversed since if you want to "zoom" your making the canvas size smaller and that brings the canvas closer to the user
+        let min = 1200;
         if (z) {
             if (currWidth >= min) {
-                $('#myCanvas').attr({ 'width': currWidth- 500, 'height': currHeight - 500 })
+                $('#myCanvas').attr({ 'width': currWidth - 200, 'height': currHeight - 200 })
             } else {
                 return;
             }
         } else {
             if (currWidth <= max) {
-                $('#myCanvas').attr({ 'width': currWidth + 500, 'height': currHeight + 500 })
+                $('#myCanvas').attr({ 'width': currWidth + 200, 'height': currHeight + 200 })
             } else {
                 return;
             }
         }
         console.log(currHeight)
     }
+    // drawing the canvas (Sheet of paper)
+    // these are the printing boundaries
     const drawing = (e) => {
         colorValElm.text("");
         // set up the values
@@ -115,6 +194,10 @@ $(document).ready(() => {
             draw(artboardObj);
         }
     };
+    // see if you can click on canvas item
+    $(canvasElm).click(e=>{
+        console.log('clicked canvas!')
+    })
     // draw when loaded
     draw(artboardObj);
 });

@@ -30,8 +30,41 @@
         <div class="canvas_tools_cont">
             <div class="btn" id="btn_plus"><i class="fa fa-plus"></i></div>
             <div class="btn" id="btn_minus"><i class="fa fa-minus"></i></div>
+            <div class="btn btn_drop_down" id="btn_dd">
+                <p>Artboard Shape: <span id="canvas_shape_style"></span></p>
+                <i class="fas fa-chevron-down"></i>
+                <div id="btn_drop_down_cont">
+                    <div data-canshape="Square" class="canvas_shape_sel">
+                        <p>Square</p>
+                        <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
+                            <rect fill="black" width="15" height="15" />
+                        </svg>
+                    </div>
+                    <div data-canshape="Rectangle" class="canvas_shape_sel canvas_shape_sel_active">
+                        <p>Rectangle</p>
+                        <svg width="25" height="15" xmlns="http://www.w3.org/2000/svg">
+                            <rect fill="black" width="25" height="15" />
+                        </svg>
+                    </div>
+                    <div data-canshape="Circle" class="canvas_shape_sel">
+                        <p>Circle</p>
+                        <svg width="15" height="15" xmlns="http://www.w3.org/2000/svg">
+                            <!-- <rect fill="black" width="15" height="15" /> -->
+                            <circle cx="7" cy="7" r="7" fill="black"/>
+                        </svg>
+                    </div>
+                    <div data-canshape="Triangle" class="canvas_shape_sel">
+                        <p>Triangle</p>
+                        <svg height="15" width="15" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="7.5,0 0,15 15,15" />
+                            Sorry, your browser does not support inline SVG.
+                          </svg>
+                    </div>
+                </div>
+            </div>
         </div>
-        <canvas id="myCanvas" ></canvas>
+        <canvas id="myCanvas"></canvas>
+        <!-- <svg id="myCanvas" xmlns="http://www.w3.org/2000/svg"></svg> -->
     </div>
 
     <script src="./index.js"></script>
